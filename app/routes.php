@@ -12,11 +12,13 @@ use Slim\Views\PhpRenderer;
 $container->view = new PhpRenderer("../public/");
 
 return function (App $app) {
-    $app->get('/', function (Request $request, Response $response) {
-       
-        
+
+    $renderAngular = function (Request $request, Response $response) {       
         return $this->view->render($response, 'index.html');
-    });
+    };
+
+    $app->get('/', $renderAngular);
+    $app->get('/app[/{params:.*}]', $renderAngular);
 
     $app->group('/users', function (Group $group) {
         $group->get('', ListUsersAction::class);
